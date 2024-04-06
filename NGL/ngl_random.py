@@ -199,14 +199,20 @@ if __name__ == "__main__":
     username = input("Enter target username: ")
     spam_choice = input("Do you want to spam? (yes/no): ").lower()
     if spam_choice == "yes" or spam_choice == "" or spam_choice == "y":
-        spam_count = int(input("How many times do you want to spam?: "))
+        while True:
+            spam_count_input = input("How many times do you want to spam?: ").strip()
+            if spam_count_input.isdigit():
+                spam_count = int(spam_count_input)
+                break
+            else:
+                print("Please enter a valid number for the spam count.")
         for _ in range(spam_count):
             message = message_generator.generate_message()  
             gameSlug = game_slug_generator.generate_game_slug()
             deviceId = deviceIDGenerator().generate_deviceId()
             referrer = ""
             response = request_sender.send_request_with_retry(username, message, deviceId, gameSlug, referrer)
-            print(f'\n{_+1} of {spam_count}')
+            print(f'\n{_ + 1} of {spam_count}')
             print(f'gameSlug: {gameSlug}')
             print(f'message : {message}')
             print(f'{response.status_code}: {response.reason} = {response.text}')

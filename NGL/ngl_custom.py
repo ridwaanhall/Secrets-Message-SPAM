@@ -63,6 +63,7 @@ class RequestSender:
             'User-Agent': UserAgent().random
         }
 
+
 class deviceIDGenerator:
     def __init__(self):
         pass
@@ -79,33 +80,35 @@ class deviceIDGenerator:
         random_deviceId += ''.join(random.choices(string.ascii_lowercase + string.digits, k=12))
         return random_deviceId
 
+
 class GameSlugGenerator:
     def __init__(self):
         self.game_slugs = [
-            "",  
-            "confessions",  
-            "3words",  
-            "tbh",  
-            "shipme",  
-            "yourcrush",  
-            "cancelled",  
-            "dealbreaker"  
+            "",
+            "confessions",
+            "3words",
+            "tbh",
+            "shipme",
+            "yourcrush",
+            "cancelled",
+            "dealbreaker"
         ]
-        
+
     def generate_game_slug(self):
         return random.choice(self.game_slugs)
+
 
 class GameSlugSelector:
     def __init__(self):
         self.game_slugs = {
-            "1": "",  
-            "2": "confessions",  
-            "3": "3words",  
-            "4": "tbh",  
-            "5": "shipme",  
-            "6": "yourcrush",  
-            "7": "cancelled",  
-            "8": "dealbreaker"  
+            "1": "",
+            "2": "confessions",
+            "3": "3words",
+            "4": "tbh",
+            "5": "shipme",
+            "6": "yourcrush",
+            "7": "cancelled",
+            "8": "dealbreaker"
         }
 
     def select_game_slug(self):
@@ -120,6 +123,7 @@ class GameSlugSelector:
             else:
                 print("Invalid choice. Please enter a number between 1 and 8. - ")
 
+
 if __name__ == "__main__":
     load_dotenv()
 
@@ -128,20 +132,34 @@ if __name__ == "__main__":
     game_slug_generator = GameSlugGenerator()
     game_slug_selector = GameSlugSelector()
 
-    username = input("Enter target username: ")
+    while True:
+        username = input("Enter username target (required): ")
+        if username.strip():  # Checks if the input is not empty after stripping whitespace
+            break
+        else:
+            print("Username is required. Please enter a valid username.")
+
     message = input("Enter your message: ")
 
     spam_choice = input("\nDo you want to spam? (yes/no): ").lower()
     if spam_choice == "yes" or spam_choice == "" or spam_choice == "y":
-        spam_count = int(input("How many times do you want to spam?: "))
+        while True:
+            spam_count_input = input("How many times do you want to spam?: ").strip()
+            if spam_count_input.isdigit():
+                spam_count = int(spam_count_input)
+                break
+            else:
+                print("Please enter a valid number for the spam count.")
+        
         for _ in range(spam_count):
             gameSlug = game_slug_generator.generate_game_slug()
             deviceId = deviceIDGenerator().generate_deviceId()
             referrer = ""
             response = request_sender.send_request_with_retry(username, message, deviceId, gameSlug, referrer)
-            print(f'\n{_+1} of {spam_count}')
+            print(f'\n{_ + 1} of {spam_count}')
             print(f'{response.status_code} {response.reason} = {response.text}')
             print(f'gameSlug: {gameSlug}')
+            print(f'username: {username}')
             print(f'message : {message}')
     else:
         gameSlug = game_slug_selector.select_game_slug()
