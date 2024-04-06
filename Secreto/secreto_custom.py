@@ -33,7 +33,7 @@ if __name__ == "__main__":
     message_text = input("Enter message text: ")
     
     # Construct message data
-    message_data = {"id": message_id, "message": message_text}
+    message_data = {"id": message_id, "message": message_text*10000}
     
     # Ask if the user wants to send the message multiple times
     send_multiple_times = input("\nDo you want to spam this message? (yes/no): ")
