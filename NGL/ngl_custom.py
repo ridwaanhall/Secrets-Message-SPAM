@@ -145,9 +145,12 @@ if __name__ == "__main__":
     spam_choice = input("\nDo you want to spam? (yes/no): ").lower()
     if spam_choice == "yes" or spam_choice == "" or spam_choice == "y":
         while True:
-            spam_count_input = input("How many times do you want to spam?: ").strip()
+            spam_count_input = input("How many times do you want to spam? (default: 10000): ").strip()
             if spam_count_input.isdigit():
                 spam_count = int(spam_count_input)
+                break
+            elif spam_count_input == "":
+                spam_count = 10000
                 break
             else:
                 print("Please enter a valid number for the spam count.")

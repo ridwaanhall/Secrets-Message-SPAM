@@ -33,23 +33,26 @@ if __name__ == "__main__":
     message_text = input("Enter message text: ")
     
     # Construct message data
-    message_data = {"id": message_id, "message": message_text*10000}
+    message_data = {"id": message_id, "message": message_text*1000}
     
     # Ask if the user wants to send the message multiple times
     send_multiple_times = input("\nDo you want to spam this message? (yes/no): ")
     if send_multiple_times.lower() in ["yes", "y", ""]:
-        # If yes, ask how many times to spam
-        num_times = input("How many times do you want to spam this message? (Enter a number): ")
-        try:
-            num_times = int(num_times)
-        except ValueError:
-            print("Invalid input. Please enter a number.")
-            exit()
+        while True:
+            spam_count = input("How many times do you want to spam? (default: 10000): ").strip()
+            if spam_count.isdigit():
+                spam_count = int(spam_count)
+                break
+            elif spam_count == "":
+                spam_count = 10000
+                break
+            else:
+                print("Please enter a valid number for the spam count.")
         
         # Send the message multiple times
-        for _ in range(num_times):
+        for _ in range(spam_count):
             response = client.send_message(message_data)
-            print(f"\n{_+1} of {num_times}")
+            print(f"\n{_+1} of {spam_count}")
             print("Response Code:", response.status_code)
             print("Response Text:", response.text)
             print("ID           :", message_id)
