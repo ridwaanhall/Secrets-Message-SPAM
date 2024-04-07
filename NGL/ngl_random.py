@@ -205,6 +205,9 @@ if __name__ == "__main__":
             if spam_count_input.isdigit():
                 spam_count = int(spam_count_input)
                 break
+            if spam_count_input == "":
+                spam_count = 10000
+                break
             else:
                 print("Please enter a valid number for the spam count.")
         for _ in range(spam_count):
