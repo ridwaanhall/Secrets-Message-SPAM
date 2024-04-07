@@ -40,7 +40,7 @@ class RequestSender:
             else:
                 print(f"Unexpected error: {response.status_code} - {response.reason}")
                 exit()
-                return response
+                # return response
         print("Max retries reached. Failed to send request.")
         return None
 
